@@ -161,5 +161,25 @@ def delete_appointment(appointment_id):
     flash('Appointment removed', 'warning')
     return redirect(url_for('appointments_list'))
 
+@app.route('/appointments/edit/<int:appointment_id>', methods=['GET','POST'])
+def edit_appointment(appointment_id):
+    a = Appointment.query.get_or_404(appointment_id)
+    form = AppointmentForm(obj=a)
+    # populate choices
+    form.patient.choices = [(p.id, p.name) for p in Patient.query.order_by(Patient.name).all()]
+    form.doctor.choices = [(d.id, d.name + ' (' + (d.specialty or 'General') + ')') for d in Doctor.query.order_by(Doctor.name).all()]
+    if form.validate_on_submit():
+        a.patient_id = form.patient.data
+        a.doctor_id = form.doctor.data
+        a.appointment_date = form.appointment_date.data.strftime('%Y-%m-%d %H:%M')
+        a.notes = form.notes.data
+        db.session.commit()
+        flash('Appointment updated', 'success')
+        return redirect(url_for('appointments_list'))
+    # Pre-fill the date field
+    form.appointment_date.data = datetime.strptime(a.appointment_date, '%Y-%m-%d %H:%M')
+    return render_template('add_appointment.html', form=form, edit=True)    
+
+
 if __name__ == '__main__':
     app.run(debug=True)
