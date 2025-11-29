@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>Doctors <a class="btn btn-sm btn-primary" href="{{ url_for('add_doctor') }}">Add</a></h2>
+  <table class="table mt-3">
+    <thead><tr><th>Name</th><th>Specialty</th><th>Contact</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for d in doctors %}
+      <tr>
+        <td>{{ d.name }}</td>
+        <td>{{ d.specialty or '' }}</td>
+        <td>{{ d.contact or '' }}</td>
+        <td>
+          <a class="btn btn-sm btn-secondary" href="{{ url_for('edit_doctor', doctor_id=d.id) }}">Edit</a>
+          <form style="display:inline" method="post" action="{{ url_for('delete_doctor', doctor_id=d.id) }}" onsubmit="return confirm('Delete this doctor?');">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

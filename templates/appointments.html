@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>Appointments <a class="btn btn-sm btn-primary" href="{{ url_for('add_appointment') }}">Create</a></h2>
+  <table class="table mt-3">
+    <thead><tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Reason</th><th>Actions</th></tr></thead>
+    <tbody>
+    {% for a in appointments %}
+      <tr>
+        <td>{{ a.patient.name }}</td>
+        <td>{{ a.doctor.name }}{% if a.doctor.specialty %} ({{ a.doctor.specialty }}){% endif %}</td>
+        <td>{{ a.appointment_date }}</td>
+        <td>{{ a.notes }}</td>
+        <td>
+          <form style="display:inline" method="post" action="{{ url_for('delete_appointment', appointment_id=a.id) }}" onsubmit="return confirm('Delete this appointment?');">
+            <button class="btn btn-sm btn-danger">Delete</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

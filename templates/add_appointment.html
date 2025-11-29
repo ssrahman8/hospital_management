@@ -1,0 +1,12 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>Create Appointment</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">{{ form.patient.label }}{{ form.patient(class_='form-control') }}</div>
+    <div class="form-group">{{ form.doctor.label }}{{ form.doctor(class_='form-control') }}</div>
+    <div class="form-group">{{ form.appointment_date.label }}{{ form.appointment_date(class_='form-control', placeholder='YYYY-MM-DD HH:MM') }}</div>
+    <div class="form-group">{{ form.notes.label }}{{ form.notes(class_='form-control') }}</div>
+    <button class="btn btn-primary">Create</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to <br> Sadiqa Hospital</h1>
+    <p class="lead">Manage patients, doctors and appointments easily.</p>
+    <hr class="my-4">
+    <p>Summary</p>
+    <div class="row">
+      <div class="col-md-4"><div class="card p-3">Patients<br><strong>{{ patients_count }}</strong></div></div>
+      <div class="col-md-4"><div class="card p-3">Doctors<br><strong>{{ doctors_count }}</strong></div></div>
+      <div class="col-md-4"><div class="card p-3">Appointments<br><strong>{{ appointments_count }}</strong></div></div>
+    </div>
+  </div>
+{% endblock %}

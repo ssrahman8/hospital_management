@@ -1,0 +1,11 @@
+{% extends 'layout.html' %}
+{% block content %}
+  <h2>{{ 'Edit' if edit else 'Add' }} Doctor</h2>
+  <form method="POST">
+    {{ form.hidden_tag() }}
+    <div class="form-group">{{ form.name.label }}{{ form.name(class_='form-control') }}</div>
+    <div class="form-group">{{ form.specialty.label }}{{ form.specialty(class_='form-control') }}</div>
+    <div class="form-group">{{ form.contact.label }}{{ form.contact(class_='form-control') }}</div>
+    <button class="btn btn-primary">Save</button>
+  </form>
+{% endblock %}
