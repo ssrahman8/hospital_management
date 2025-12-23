@@ -8,6 +8,9 @@ class PatientForm(FlaskForm):
     gender = SelectField('Gender', choices=[('', ''), ('Male','Male'), ('Female','Female'), ('Other','Other')], validators=[Optional()])
     contact = StringField('Contact', validators=[Optional()])
     address = TextAreaField('Address', validators=[Optional()])
+    parentname = StringField('Parent Name', validators=[DataRequired()])
+    parentnumber = StringField('Parent Contact', validators=[Optional()])
+    cause = StringField('Cause/Reason for Visit', validators=[Optional()])
     submit = SubmitField('Save')
 
 class DoctorForm(FlaskForm):

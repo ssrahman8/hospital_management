@@ -20,8 +20,9 @@ class Patient(db.Model):
     gender = db.Column(db.String(20))
     contact = db.Column(db.String(50))
     address = db.Column(db.String(250))
-    parentname=db.column(db.string,nullabel=False)
-    parentnumber=db.column(db.int(100))
+    parentname = db.Column(db.String(120), nullable=False)
+    parentnumber = db.Column(db.String(20))
+    cause = db.Column(db.String(250))
 
 
     def __repr__(self):
@@ -29,7 +30,7 @@ class Patient(db.Model):
 
 class Doctor(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(120), nullable=False)
+    name = db.Column(db.String(110), nullable=False)
     specialty = db.Column(db.String(120))
     contact = db.Column(db.String(50))
 
@@ -50,8 +51,7 @@ class Appointment(db.Model):
         return f"<Appointment {self.id} - P{self.patient_id} D{self.doctor_id}>"
 
 # Create tables before first request
-@app.before_request
-def create_tables():
+with app.app_context():
     db.create_all()
 
 @app.route('/')
@@ -71,7 +71,7 @@ def patients_list():
 def add_patient():
     form = PatientForm()
     if form.validate_on_submit():
-        p = Patient(name=form.name.data, age=form.age.data, gender=form.gender.data, contact=form.contact.data, address=form.address.data)
+        p = Patient(name=form.name.data, age=form.age.data, gender=form.gender.data, contact=form.contact.data, address=form.address.data, parentname=form.parentname.data, parentnumber=form.parentnumber.data, cause=form.cause.data)
         db.session.add(p)
         db.session.commit()
         flash('Patient added successfully', 'success')
@@ -160,25 +160,6 @@ def delete_appointment(appointment_id):
     db.session.commit()
     flash('Appointment removed', 'warning')
     return redirect(url_for('appointments_list'))
-
-@app.route('/appointments/edit/<int:appointment_id>', methods=['GET','POST'])
-def edit_appointment(appointment_id):
-    a = Appointment.query.get_or_404(appointment_id)
-    form = AppointmentForm(obj=a)
-    # populate choices
-    form.patient.choices = [(p.id, p.name) for p in Patient.query.order_by(Patient.name).all()]
-    form.doctor.choices = [(d.id, d.name + ' (' + (d.specialty or 'General') + ')') for d in Doctor.query.order_by(Doctor.name).all()]
-    if form.validate_on_submit():
-        a.patient_id = form.patient.data
-        a.doctor_id = form.doctor.data
-        a.appointment_date = form.appointment_date.data.strftime('%Y-%m-%d %H:%M')
-        a.notes = form.notes.data
-        db.session.commit()
-        flash('Appointment updated', 'success')
-        return redirect(url_for('appointments_list'))
-    # Pre-fill the date field
-    form.appointment_date.data = datetime.strptime(a.appointment_date, '%Y-%m-%d %H:%M')
-    return render_template('add_appointment.html', form=form, edit=True)    
 
 
 if __name__ == '__main__':

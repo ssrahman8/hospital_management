@@ -5,7 +5,10 @@ CREATE TABLE patient (
     age INTEGER,
     gender TEXT,
     contact TEXT,
-    address TEXT
+    address TEXT,
+    parentname TEXT NOT NULL,
+    parentnumber TEXT,
+    cause TEXT
 );
 
 CREATE TABLE doctor (
